@@ -1,7 +1,7 @@
 workflows:
   windows-to-ios-workflow:
     name: iOS Build (Windows Fix)
-    instance_type: mac_macmini_m2
+    instance_type: mac_mini_m2
     environment:
       flutter: stable
     scripts:
