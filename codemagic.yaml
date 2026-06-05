@@ -1,17 +1,21 @@
 workflows:
   windows-to-ios-workflow:
     name: iOS Build (Windows Fix)
-    instance_type: mac_mini_m2
+    instance_type: mac_macmini_m2
     environment:
       flutter: stable
     scripts:
-      - name: 1. Delete Corrupted Windows iOS Folder
-        script: rm -rf ios
-      - name: 2. Generate Fresh Mac iOS Folder
-        script: flutter create .
-      - name: 3. Install Dependencies
+      - name: 1. Clean and Generate iOS files
+        script: |
+          rm -rf ios
+          flutter create .
+      - name: 2. Install Dependencies
         script: flutter pub get
-      - name: 4. Build iOS App
-        script: flutter build ipa --release --no-codesign
+      - name: 3. Build and Package IPA
+        script: |
+          flutter build ios --release --no-codesign
+          mkdir -p Payload
+          mv build/ios/iphoneos/Runner.app Payload/
+          zip -r counter_app.ipa Payload
     artifacts:
-      - build/ios/ipa/*.ipa
+      - counter_app.ipa
